@@ -3,11 +3,11 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 import router from '../router';
 
-// 响应拦截器
+// 请求回调响应拦截器
 axios.interceptors.response.use(success => {
     // 业务逻辑错误
-    if (success.status && success.status == 200) {
-        if (success.data.code == 500 || success.data.code == 401 || success.data.code == 403) {
+    if (success.status && 200 == success.status) {
+        if (500 == success.data.code || 401 == success.data.code || 403 == success.data.code ) {
             Message.error(success.data.message);
             return;
         }
