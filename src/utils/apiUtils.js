@@ -37,3 +37,36 @@ axios.interceptors.response.use(success => {
     }
     return;
 });
+
+
+// 基础路径
+let basePath = ''
+/**
+ * POST 请求
+ * 
+ * @param {*} url 请求url
+ * @param {*} params 请求参数
+ * @returns 
+ */
+export const POST = (url, params) => {
+    return axios({
+        method: 'post',
+        url: `${basePath}${url}`,
+        data: params
+    })
+}
+
+/**
+ * GET 请求
+ * 
+ * @param {*} url 请求url
+ * @param {*} params 请求参数
+ * @returns 
+ */
+ export const GET = (url, params) => {
+    return axios({
+        method: "get",
+        url: `${basePath}${url}`,
+        data: params
+    })
+}
