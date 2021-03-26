@@ -30,13 +30,11 @@
         placeholder="点击图片，更换验证码"
         style="width: 250px"
       ></el-input>
-      <img :src="codeUrl" />
+      <img :src="codeUrl" @click="updateCode" />
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="submitForm()"
-        >登录</el-button
-      >
+      <el-button type="primary" @click="submitForm()">登录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -51,7 +49,7 @@ export default {
         password: "",
         code: "",
       },
-      codeUrl: "",
+      codeUrl: "/account/code?time=" + new Date(),
       rules: {
         name: [
           { required: true, message: "请输入账号", trigger: "blur" },
@@ -66,23 +64,26 @@ export default {
   },
 
   methods: {
+    updateCode() {
+      this.codeUrl = "/account/code?time=" + new Date()
+    },
     submitForm() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           alert("submit!");
         } else {
-            if (this.loginForm.name.length == 0) {
-                this.$message.error("账号不能为空");
-                return;
-            }
-            if (this.loginForm.password.length == 0) {
-                this.$message.error("密码不能为空");
-                return;
-            }
-            if (this.loginForm.code.length == 0) {
-                this.$message.error("验证码不能为空");
-                return;
-            }
+          if (this.loginForm.name.length == 0) {
+            this.$message.error("账号不能为空");
+            return;
+          }
+          if (this.loginForm.password.length == 0) {
+            this.$message.error("密码不能为空");
+            return;
+          }
+          if (this.loginForm.code.length == 0) {
+            this.$message.error("验证码不能为空");
+            return;
+          }
           return false;
         }
       });
