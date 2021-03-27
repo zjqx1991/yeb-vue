@@ -79,7 +79,7 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           POST(LOGIN_URL, this.loginForm).then((resp) => {
-            console.log(resp);
+            this.$router.replace('/home')
           });
         } else {
           if (this.loginForm.username.length == 0) {
