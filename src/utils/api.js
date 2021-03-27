@@ -7,10 +7,15 @@ import router from '../router';
 axios.interceptors.response.use(success => {
     // 业务逻辑错误
     if (success.status && 200 == success.status) {
-        if (500 == success.data.code || 401 == success.data.code || 403 == success.data.code ) {
-            Message.error(success.data.message);
+        
+        if (success.data.code > 0) {
+            Message.error(success.data.msg);
             return;
         }
+        // if (500 == success.data.code || 401 == success.data.code || 403 == success.data.code ) {
+        //     Message.error(success.data.msg);
+        //     return;
+        // }
         if (success.data.message) {
             Message.success(success.data.message);
         }
