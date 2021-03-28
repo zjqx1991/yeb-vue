@@ -46,8 +46,7 @@
 </template>
 
 <script>
-import {POST} from '../../utils/api'
-import { CODE_URL,LOGIN_URL } from '../../utils/apiUrlConst'
+import { CODE_URL, LOGIN_URL } from "../../utils/apiUrlConst";
 export default {
   name: "Login",
   data() {
@@ -78,8 +77,14 @@ export default {
     submitForm() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          POST(LOGIN_URL, this.loginForm).then((resp) => {
-            this.$router.replace('/home')
+          this.POST(LOGIN_URL, this.loginForm).then((resp) => {
+            if (0 == resp.code) {
+              // 存储用户 token
+              const toeknStr = resp.data.tokenHead + resp.data.token;
+              window.sessionStorage.setItem(resp.data.tokenHead, toeknStr);
+              // 跳转首页
+              this.$router.replace("/home");
+            }
           });
         } else {
           if (this.loginForm.username.length == 0) {

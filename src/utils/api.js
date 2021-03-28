@@ -3,7 +3,24 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 import router from '../router';
 
-// 请求回调响应拦截器
+
+
+/**
+ * 请求拦截器
+ */
+axios.interceptors.request.use(config => {
+    // 如果存在 token，请求携带这个 token
+    if (window.sessionStorage.getItem('tokenHead')) {
+        config.headers['Authorization'] = window.sessionStorage.getItem('tokenHead')
+    }
+    return config
+}, error => {
+    console.log(error)
+})
+
+/**
+ * 请求回调响应拦截器
+ */
 axios.interceptors.response.use(success => {
     // 业务逻辑错误
     if (success.status && 200 == success.status) {
