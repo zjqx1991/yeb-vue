@@ -1,7 +1,28 @@
 <!-- Home页 -->
 <template>
   <div class="">
-      Home页
+    <el-container>
+      <el-header>Header</el-header>
+      <el-container>
+        <el-aside width="200px">
+          <!-- 启用 router 路由 -->
+          <el-menu router>
+            <template v-for="(item, index) in this.$router.options.routes">
+              <el-submenu index="1" :key="index" v-if="!item.hidden">
+                <template slot="title"
+                  ><i class="el-icon-message"></i>
+                  <span>{{ item.name }}</span>
+                </template>
+                <el-menu-item :index="subItem.path" v-for="(subItem, subIndex) in item.children" :key="subIndex">
+                  <span>{{ subItem.name }}</span>
+                </el-menu-item>
+              </el-submenu>
+            </template>
+          </el-menu>
+        </el-aside>
+        <el-main>Main</el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
