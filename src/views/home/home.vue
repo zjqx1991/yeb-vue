@@ -85,16 +85,28 @@ export default {
     onClickMenu(command) {
       switch(command) {
         case 'logout': {
+          this.$confirm('此操作将退出登录, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          
           // 注销登录
           this.POST(LOGOUT_URL);
           // 清空用户信息
           window.sessionStorage.removeItem(USERINFO_KEY)
           // 清空token
           window.sessionStorage.removeItem(TOKEN_KEY)
-          // 清空vuex
-
+          // 清空菜单
+          this.$store.commit('initRoutes', [])
           // 跳转到登录页
           this.$router.replace('/')
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          });          
+        });
           break
         }
       }
@@ -103,7 +115,11 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    this.userInfo = JSON.parse(window.sessionStorage.getItem(USERINFO_KEY));
+    let user = JSON.parse(window.sessionStorage.getItem(USERINFO_KEY))
+    if (user) {
+      this.userInfo = user
+    }
+    
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
