@@ -24,9 +24,7 @@ export const initMenus = (router, store) => {
 export const formatRoutes = (routes)  => {
     let fmtRoutes = [];
     routes.forEach(router => {
-        console.log(`传入菜单列表-2-${router.path}`)
-        console.log(`传入菜单列表-2-${router.name}`)
-        console.log(`传入菜单列表-2-${router.children.length}`)
+        
         let{
             path,
             component,
@@ -38,22 +36,31 @@ export const formatRoutes = (routes)  => {
             // 递归
             children = formatRoutes(children)
         }
-        console.log(`传入菜单列表-3-${router.path}`)
-        console.log(`传入菜单列表-3-${router.name}`)
-        console.log(`传入菜单列表-3-${router.children.length}`)
 
-        console.log(`传入菜单列表-4-${router.component}`)
         let fmRouter = {
             path: path,
             name: name,
             iconCls: iconCls,
             children: children,
             component(resolve){
-                // console.log(`传入菜单列表-4-${component}`)
-                // require(['../views/' + component + '.vue'], resolve);
+                if (component.startWith('Employee')) {
+                    require(['../views/employee/' + component + '.vue'], resolve);    
+                }
+                else if (component.startWith('Personnel')) {
+                    require(['../views/personnel/' + component + '.vue'], resolve);
+                }
+                else if (component.startWith('Salary')) {
+                    require(['../views/salary/' + component + '.vue'], resolve);
+                }
+                else if (component.startWith('Statistics')) {
+                    require(['../views/statistics/' + component + '.vue'], resolve);
+                }
+                else if (component.startWith('System')) {
+                    require(['../views/system/' + component + '.vue'], resolve);
+                }
+                
             }
         }
-
 
         fmtRoutes.push(fmRouter)
     })
