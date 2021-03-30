@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
 import router from '../router';
+import { TOKEN_KEY } from './const_utils';
 
 
 
@@ -10,8 +11,9 @@ import router from '../router';
  */
 axios.interceptors.request.use(config => {
     // 如果存在 token，请求携带这个 token
-    if (window.sessionStorage.getItem('tokenHead')) {
-        config.headers['Authorization'] = window.sessionStorage.getItem('tokenHead')
+    let token = window.sessionStorage.getItem(TOKEN_KEY)
+    if (token) {
+        config.headers['Authorization'] = token
     }
     return config
 }, error => {

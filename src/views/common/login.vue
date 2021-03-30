@@ -47,6 +47,7 @@
 
 <script>
 import { CODE_URL, LOGIN_URL } from "../../utils/apiUrlConst";
+import { TOKEN_KEY } from '../../utils/const_utils';
 export default {
   name: "Login",
   data() {
@@ -81,7 +82,7 @@ export default {
             if (0 == resp.code) {
               // 存储用户 token
               const toeknStr = resp.data.tokenHead + resp.data.token;
-              window.sessionStorage.setItem(resp.data.tokenHead, toeknStr);
+              window.sessionStorage.setItem(TOKEN_KEY, toeknStr);
               // 跳转首页
               this.$router.replace("/home");
             }

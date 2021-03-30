@@ -1,4 +1,4 @@
 /**
- * 存储菜单到 vuex 的 key
+ * 存储登录成功后的 token
  */
- export const MENUS_KEY = 'menus_key'
+ export const TOKEN_KEY = 'token_key'
