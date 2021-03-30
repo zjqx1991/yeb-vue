@@ -2,7 +2,9 @@
 <template>
   <div class="">
     <el-container>
-      <el-header>Header</el-header>
+      <el-header class="homeHeader">
+        <div class="title">云E办</div>
+      </el-header>
       <el-container>
         <el-aside width="200px">
           <!-- 启用 router 路由 -->
@@ -10,7 +12,7 @@
             <template v-for="(item, index) in routes">
               <el-submenu :index='index + ""' :key="index" v-if="!item.hidden">
                 <template slot="title"
-                  ><i class="el-icon-message"></i>
+                  ><i :class="item.iconCls" style="color: #2accff; margin-right: 8px"></i>
                   <span>{{ item.name }}</span>
                 </template>
                 <el-menu-item :index="subItem.path" v-for="(subItem, subIndex) in item.children" :key="subIndex">
@@ -66,6 +68,17 @@ export default {
 };
 </script>
 <style>
-/* // <style lang='scss' scoped> */
-/* //@import url(); 引入公共css类 */
+  .homeHeader {
+    background: #409eff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+  .homeHeader .title {
+    font-size: 30px;
+    font-family: 华文行楷;
+    color: white;
+  }
 </style>
