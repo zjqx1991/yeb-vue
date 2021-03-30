@@ -25,7 +25,6 @@ Vue.prototype.POST = POST
  */
 router.beforeEach((to, from, next) => {
   let token = window.sessionStorage.getItem(TOKEN_KEY)
-  console.log(`路由导航，前缀守卫--${token}`)
   if (token) {
     initMenus(router, store);
   }

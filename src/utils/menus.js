@@ -32,6 +32,7 @@ export const formatRoutes = (routes)  => {
             iconCls,
             children,
         } = router;
+
         if (children && children instanceof Array) {
             // 递归
             children = formatRoutes(children)
@@ -43,19 +44,22 @@ export const formatRoutes = (routes)  => {
             iconCls: iconCls,
             children: children,
             component(resolve){
-                if (component.startWith('Employee')) {
+                if (component.startsWith('Home')) {
+                    require(['../views/home/' + component + '.vue'], resolve);    
+                }
+                else if (component.startsWith('Employee')) {
                     require(['../views/employee/' + component + '.vue'], resolve);    
                 }
-                else if (component.startWith('Personnel')) {
+                else if (component.startsWith('Personnel')) {
                     require(['../views/personnel/' + component + '.vue'], resolve);
                 }
-                else if (component.startWith('Salary')) {
+                else if (component.startsWith('Salary')) {
                     require(['../views/salary/' + component + '.vue'], resolve);
                 }
-                else if (component.startWith('Statistics')) {
+                else if (component.startsWith('Statistics')) {
                     require(['../views/statistics/' + component + '.vue'], resolve);
                 }
-                else if (component.startWith('System')) {
+                else if (component.startsWith('System')) {
                     require(['../views/system/' + component + '.vue'], resolve);
                 }
                 

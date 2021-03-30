@@ -7,8 +7,8 @@
         <el-aside width="200px">
           <!-- 启用 router 路由 -->
           <el-menu router>
-            <template v-for="(item, index) in this.$router.options.routes">
-              <el-submenu index="1" :key="index" v-if="!item.hidden">
+            <template v-for="(item, index) in routes">
+              <el-submenu :index='index + ""' :key="index" v-if="!item.hidden">
                 <template slot="title"
                   ><i class="el-icon-message"></i>
                   <span>{{ item.name }}</span>
@@ -39,15 +39,23 @@ export default {
     return {};
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    routes() {
+      // 从计算属性中获取路由列表
+      console.log(this.$store.state.routes.length)
+      return this.$store.state.routes;
+    }
+  },
   //监控data中的数据变化
   watch: {},
   //方法集合
   methods: {},
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {},
+  created() {
+  },
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
