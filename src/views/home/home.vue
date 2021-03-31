@@ -40,14 +40,31 @@
             </template>
           </el-menu>
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <el-breadcrumb v-if="this.$router.currentRoute.path != '/home'">
+            <el-breadcrumb-item :to="{ path: '/home' }"
+              >首页</el-breadcrumb-item
+            >
+            <el-breadcrumb-item>{{
+              this.$router.currentRoute.name
+            }}</el-breadcrumb-item>
+          </el-breadcrumb>
+          <div
+            class="homeWelcome"
+            v-if="this.$router.currentRoute.path == '/home'"
+          >
+            欢迎来到云E办系统！！！
+          </div>
+          <!-- 导航跳转 -->
+          <router-view />
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
-import { LOGOUT_URL } from '../../utils/apiUrlConst';
+import { LOGOUT_URL } from "../../utils/apiUrlConst";
 import { TOKEN_KEY, USERINFO_KEY } from "../../utils/const_utils";
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
@@ -74,7 +91,6 @@ export default {
   computed: {
     routes() {
       // 从计算属性中获取路由列表
-      console.log(this.$store.state.routes.length);
       return this.$store.state.routes;
     },
   },
@@ -83,48 +99,45 @@ export default {
   //方法集合
   methods: {
     onClickMenu(command) {
-      switch(command) {
-        case 'logout': {
-          this.$confirm('此操作将退出登录, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          
-          // 注销登录
-          this.POST(LOGOUT_URL);
-          // 清空用户信息
-          window.sessionStorage.removeItem(USERINFO_KEY)
-          // 清空token
-          window.sessionStorage.removeItem(TOKEN_KEY)
-          // 清空菜单
-          this.$store.commit('initRoutes', [])
-          // 跳转到登录页
-          this.$router.replace('/')
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消操作'
-          });          
-        });
-          break
+      switch (command) {
+        case "logout": {
+          this.$confirm("此操作将退出登录, 是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          })
+            .then(() => {
+              // 注销登录
+              this.POST(LOGOUT_URL);
+              // 清空用户信息
+              window.sessionStorage.removeItem(USERINFO_KEY);
+              // 清空token
+              window.sessionStorage.removeItem(TOKEN_KEY);
+              // 清空菜单
+              this.$store.commit("initRoutes", []);
+              // 跳转到登录页
+              this.$router.replace("/");
+            })
+            .catch(() => {
+              this.$message({
+                type: "info",
+                message: "已取消操作",
+              });
+            });
+          break;
         }
       }
-      
-    }
+    },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    let user = JSON.parse(window.sessionStorage.getItem(USERINFO_KEY))
+    let user = JSON.parse(window.sessionStorage.getItem(USERINFO_KEY));
     if (user) {
-      this.userInfo = user
+      this.userInfo = user;
     }
-    
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-    
-  },
+  mounted() {},
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -154,5 +167,11 @@ export default {
   border-radius: 24px;
   margin-left: 10px;
 }
-
+.homeWelcome {
+  text-align: center;
+  font-size: 30px;
+  font-family: 华文楷体;
+  color: #409eff;
+  padding-top: 50px;
+}
 </style>

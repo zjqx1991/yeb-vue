@@ -84,7 +84,8 @@ export default {
               const toeknStr = resp.data.tokenHead + resp.data.token;
               window.sessionStorage.setItem(TOKEN_KEY, toeknStr);
               // 跳转首页
-              this.$router.replace("/home");
+              let path = this.$route.query.redirect;
+              this.$router.replace((path == '/' || path == undefined) ? "/home" : path)
             }
           });
         } else {
