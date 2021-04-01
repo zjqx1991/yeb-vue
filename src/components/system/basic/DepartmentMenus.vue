@@ -1,7 +1,7 @@
 <!-- 部门管理 -->
 <template>
   <div class="">
-
+    部门管理
   </div>
 </template>
 

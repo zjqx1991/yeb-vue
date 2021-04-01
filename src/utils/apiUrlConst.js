@@ -36,5 +36,10 @@ export const LOGIN_URL = `${baseUrlPath}/account/login`
   * 职位批量删除
   */
  export const SYSTEM_BASIC_POSITION_DELETE_URL = `${baseUrlPath}/system/basic/position/delete`
+
+ /**
+  * 职位更新
+  */
+ export const SYSTEM_BASIC_POSITION_UPDATE_URL = `${baseUrlPath}/system/basic/position/update`
   
  

@@ -1,7 +1,7 @@
 <!-- SystemBasic -->
 <template>
   <div class="">
-    <el-tabs type="card" @tab-click="handleClick">
+    <el-tabs type="card" v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="部门管理" name="department"><DepartmentMenus/></el-tab-pane>
     <el-tab-pane label="职位管理" name="jobs"><JobsMenus/></el-tab-pane>
     <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
@@ -24,7 +24,9 @@ export default {
   },
   data() {
     //这里存放数据
-    return {};
+    return {
+      activeName: 'department'
+    };
   },
   //监听属性 类似于data概念
   computed: {},
@@ -33,7 +35,8 @@ export default {
   //方法集合
   methods: {
       handleClick(tab, event) {
-        console.log(tab, event);
+        this.activeName = tab.name
+        console.log(tab.name);
       }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

@@ -39,10 +39,12 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small"
-              >查看</el-button
+            <el-button @click="onClickInfo(scope.row)" type="text" size="small"
+              >详情</el-button
             >
-            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="text" size="small" @click="onClickEdit(scope.row)"
+              >编辑</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -51,6 +53,51 @@
       <el-button :disabled="disabled" type="danger" @click="deleteBatch"
         >批量删除</el-button
       >
+    </div>
+    <div>
+      <el-dialog :visible.sync="showDialog" width="350px">
+        <div>
+          <el-tag size="small">职位名称</el-tag>
+          {{ infoData.name }}
+        </div>
+        <div>
+          <el-tag size="small">创建时间</el-tag>
+          {{ infoData.createdate }}
+        </div>
+      </el-dialog>
+    </div>
+
+    <div>
+      <el-dialog title="职位编辑" :visible.sync="dialogEditJobs">
+        <el-form :model="infoData">
+          <el-form-item>
+            <el-tag>职位名称</el-tag>
+            <el-input
+              class="editInput"
+              size="small"
+              v-model="infoData.name"
+            ></el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <el-tag class="tagEnabled">状态</el-tag>
+            <el-switch
+              v-model="infoData.enabled"
+              active-color="#13ce66"
+              inactive-color="#dddddd"
+              active-text="启用"
+              inactive-text="关闭"
+              :active-value="1"
+              :inactive-value="0"
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogEditJobs = false">取 消</el-button>
+          <el-button type="primary" @click="onClickUpdate">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -61,6 +108,8 @@
 import {
   SYSTEM_BASIC_POSITION_LIST_URL,
   SYSTEM_BASIC_POSITION_SAVE_URL,
+  SYSTEM_BASIC_POSITION_UPDATE_URL,
+  SYSTEM_BASIC_POSITION_DELETE_URL,
 } from "../../../utils/apiUrlConst";
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -72,9 +121,17 @@ export default {
         id: null,
         name: "",
       },
+      infoData: {
+        id: null,
+        name: "",
+        createdate: "",
+        enabled: 1,
+      },
       tableData: [],
       multipleSelection: [],
       disabled: true,
+      showDialog: false,
+      dialogEditJobs: false,
     };
   },
   //监听属性 类似于data概念
@@ -89,7 +146,7 @@ export default {
         if (0 == res.code) {
           this.getJobsList();
           this.$message({
-            message: '新增职位成功',
+            message: "新增职位成功",
             type: "success",
           });
         } else {
@@ -123,18 +180,49 @@ export default {
       this.multipleSelection.forEach((item, index) => {
         ids[index] = item.id;
       });
-      return;
-      this.POST(SYSTEM_BASIC_POSITION_DELETE_URL, ids).then((res) => {
+      this.$confirm("此操作将永久删除数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.POST(SYSTEM_BASIC_POSITION_DELETE_URL, ids).then((res) => {
+            if (0 == res.code) {
+              this.getJobsList();
+              this.$message({
+                  message: "删除成功",
+                  type: "success",
+                });
+            } else {
+              this.$message.error(res.msg);
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    onClickInfo(data) {
+      this.showDialog = true;
+      Object.assign(this.infoData, data);
+    },
+    onClickEdit(data) {
+      console.log(data);
+      this.dialogEditJobs = true;
+      Object.assign(this.infoData, data);
+    },
+    onClickUpdate() {
+      this.POST(SYSTEM_BASIC_POSITION_UPDATE_URL, this.infoData).then((res) => {
         if (0 == res.code) {
+          this.dialogEditJobs = false;
+          this.$message({
+            message: "更新职位成功",
+            type: "success",
+          });
           this.getJobsList();
-          if (res.msg) {
-            this.$message({
-              message: res.msg,
-              type: "success",
-            });
-          }
-        } else {
-          this.$message.error(res.msg);
         }
       });
     },
@@ -157,5 +245,12 @@ export default {
 <style scoped>
 .danger {
   margin-top: 10px;
+}
+.editInput {
+  margin-left: 10px;
+  width: 250px;
+}
+.tagEnabled {
+  margin-right: 10px;
 }
 </style>
